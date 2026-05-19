@@ -1,3 +1,7 @@
+## Author
+Gimhani Dilmika — University of Jaffna
+Decodelabs Internship Project 4
+
 # AI Study Assistant — Project 4
 
 A full-stack AI-powered study tool that turns any notes or PDF into summaries, flashcards, quizzes, and an AI tutor chat.
