@@ -1,87 +1,61 @@
+# StudyFlow AI — AI Study Assistant
+
 ## Author
-Gimhani Dilmika — University of Jaffna
-Decodelabs Internship Project 4
+**Gimhani Dilmika**  
+University of Jaffna  
+DecodeLabs Internship Project 4
 
-# AI Study Assistant — Project 4
+---
 
-A full-stack AI-powered study tool that turns any notes or PDF into summaries, flashcards, quizzes, and an AI tutor chat.
+## Project Overview
+
+**StudyFlow AI** is a full-stack AI-powered study assistant chatbot built with **Python Flask** and the **Groq API**.  
+The system provides a clean and modern chat interface where users can ask questions, learn programming concepts, get study explanations, generate interview preparation answers, and receive AI-based learning support.
+
+This project focuses on building a practical AI web application with a Flask backend, API integration, responsive frontend design, and browser-based chat session management.
+
+---
 
 ## Features
 
 | Feature | Description |
-|---------|-------------|
-| 📋 **AI Summary** | Structured summary with key concepts, details, and takeaways |
-| 🃏 **Flashcards** | 8-10 auto-generated click-to-flip flashcards |
-| 📝 **Quiz** | 5 multiple choice questions with scoring and explanations |
-| 💬 **AI Tutor Chat** | Ask anything about your material with memory |
-| 📄 **PDF Upload** | Upload PDF, TXT, or MD files |
-| 📋 **Paste Notes** | Paste text directly without a file |
-| 🗂️ **Document Library** | Save and switch between multiple documents |
+|--------|-------------|
+| 💬 **AI Chatbot** | Ask questions and receive AI-powered responses |
+| 📚 **Study Assistant** | Get explanations for programming, learning topics, and study materials |
+| 🧠 **Context Memory** | Maintains recent chat context during conversation |
+| 🗂️ **Recent Chat Sessions** | Saves chat sessions in the browser using local storage |
+| 🆕 **New Chat** | Start a new conversation anytime |
+| 📋 **Copy Messages** | Copy assistant or user messages easily |
+| ⬇️ **Download Chat** | Download the current chat as a `.txt` file |
+| 🌙 **Dark / Light Mode** | Switch between dark and light themes |
+| 🎨 **Modern UI** | Clean, responsive, user-friendly frontend |
+| ⚡ **Groq API Integration** | Fast AI response generation using Groq model API |
 
-## Quick Start
+---
 
-```bash
-# 1. Enter the project
-cd ai-study-assistant
+## Tech Stack
 
-# 2. Create virtual environment
-python -m venv venv
-venv\Scripts\activate        # Windows
-source venv/bin/activate     # Mac/Linux
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Add your API key
-copy .env.example .env       # Windows
-cp .env.example .env         # Mac/Linux
-# Edit .env and add your ANTHROPIC_API_KEY
-
-# 5. Run
-python app.py
-```
-
-Visit **http://localhost:5000**
+| Layer | Technology |
+|------|------------|
+| Frontend | HTML, CSS, JavaScript |
+| Backend | Python Flask |
+| AI API | Groq API |
+| Environment Variables | python-dotenv |
+| Server | Flask development server / Gunicorn for deployment |
+| Storage | Browser LocalStorage for chat sessions |
 
 ---
 
 ## Project Structure
 
-```
+```text
 ai-study-assistant/
-├── app.py                  # Flask backend
-├── requirements.txt
-├── .env.example
+├── app.py                  # Flask backend + frontend UI
+├── requirements.txt        # Python dependencies
+├── .env.example            # Example environment variables
+├── .gitignore              # Files ignored by Git
+├── README.md               # Project documentation
 ├── database/
-│   └── study.db            # Auto-created SQLite DB
-├── uploads/                # Temp upload folder
-├── templates/
-│   └── index.html          # Main UI
-└── static/
-    ├── css/style.css
-    └── js/app.js
-```
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/` | Main UI |
-| POST | `/api/upload` | Upload PDF/TXT file |
-| POST | `/api/paste` | Save pasted text |
-| POST | `/api/summarize` | Generate summary |
-| POST | `/api/flashcards` | Generate flashcards |
-| POST | `/api/quiz` | Generate quiz |
-| POST | `/api/chat` | AI tutor chat |
-| GET | `/api/documents` | List all documents |
-| DELETE | `/api/documents/<id>` | Delete a document |
-
-## Tech Stack
-
-- Python 3.10+ / Flask 3.x
-- Anthropic Claude API
-- pdfplumber (PDF text extraction)
-- SQLite (document storage)
-- Vanilla JS — no framework needed
-## Live Demo
-Coming soon — deploying to Railway
+│   └── study.db            # Optional local database file
+├── uploads/                # Optional upload folder
+└── static/                 # Optional static assets
