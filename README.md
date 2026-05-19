@@ -83,3 +83,5 @@ ai-study-assistant/
 - pdfplumber (PDF text extraction)
 - SQLite (document storage)
 - Vanilla JS — no framework needed
+## Live Demo
+Coming soon — deploying to Railway
