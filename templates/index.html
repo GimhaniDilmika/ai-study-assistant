@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Study Assistant</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      StudyAI
+    </div>
+
+    <div class="upload-section">
+      <p class="section-label">Upload Material</p>
+      <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>Drop PDF or TXT here</span>
+        <small>or click to browse</small>
+      </div>
+      <input type="file" id="file-input" accept=".pdf,.txt,.md" style="display:none" onchange="uploadFile(this)"/>
+
+      <div class="or-divider">or</div>
+
+      <button class="paste-btn" onclick="showPasteModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+        Paste text / notes
+      </button>
+    </div>
+
+    <div class="docs-section">
+      <p class="section-label">My Documents</p>
+      <div id="docs-list" class="docs-list">
+        <div class="empty-docs">No documents yet</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Welcome screen -->
+    <div id="welcome-screen" class="welcome-screen">
+      <div class="welcome-icon">📚</div>
+      <h1>AI Study Assistant</h1>
+      <p>Upload your notes, textbook pages, or paste any study material to get started.</p>
+      <div class="welcome-features">
+        <div class="feature-pill">📋 Summaries</div>
+        <div class="feature-pill">🃏 Flashcards</div>
+        <div class="feature-pill">📝 Quizzes</div>
+        <div class="feature-pill">💬 AI Tutor Chat</div>
+      </div>
+    </div>
+
+    <!-- Study area (shown after doc selected) -->
+    <div id="study-area" style="display:none">
+
+      <!-- Doc info bar -->
+      <div class="doc-bar">
+        <div class="doc-info">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span id="doc-name">Document</span>
+          <span id="doc-words" class="doc-words"></span>
+        </div>
+        <div class="mode-tabs">
+          <button class="mode-tab active" data-mode="summary" onclick="switchMode('summary')">📋 Summary</button>
+          <button class="mode-tab" data-mode="flashcards" onclick="switchMode('flashcards')">🃏 Flashcards</button>
+          <button class="mode-tab" data-mode="quiz" onclick="switchMode('quiz')">📝 Quiz</button>
+          <button class="mode-tab" data-mode="chat" onclick="switchMode('chat')">💬 Ask AI</button>
+        </div>
+      </div>
+
+      <!-- Summary Mode -->
+      <div class="mode-content active" id="mode-summary">
+        <div class="mode-header">
+          <div>
+            <div class="mode-title">AI Summary</div>
+            <div class="mode-hint">Get a structured summary of your material</div>
+          </div>
+          <button class="generate-btn" onclick="generateSummary()">Generate Summary</button>
+        </div>
+        <div id="summary-output" class="output-box" style="display:none"></div>
+        <div id="summary-loading" class="loading-state" style="display:none">
+          <div class="spinner"></div> Summarizing your material...
+        </div>
+      </div>
+
+      <!-- Flashcards Mode -->
+      <div class="mode-content" id="mode-flashcards">
+        <div class="mode-header">
+          <div>
+            <div class="mode-title">Flashcards</div>
+            <div class="mode-hint">Click a card to reveal the answer</div>
+          </div>
+          <button class="generate-btn" onclick="generateFlashcards()">Generate Flashcards</button>
+        </div>
+        <div id="flashcards-output" class="flashcards-grid"></div>
+        <div id="flashcards-loading" class="loading-state" style="display:none">
+          <div class="spinner"></div> Creating flashcards...
+        </div>
+      </div>
+
+      <!-- Quiz Mode -->
+      <div class="mode-content" id="mode-quiz">
+        <div class="mode-header">
+          <div>
+            <div class="mode-title">Practice Quiz</div>
+            <div class="mode-hint">Test your knowledge</div>
+          </div>
+          <button class="generate-btn" onclick="generateQuiz()">Generate Quiz</button>
+        </div>
+        <div id="quiz-output" class="quiz-container"></div>
+        <div id="quiz-loading" class="loading-state" style="display:none">
+          <div class="spinner"></div> Creating quiz questions...
+        </div>
+        <div id="quiz-result" class="quiz-result" style="display:none"></div>
+      </div>
+
+      <!-- Chat Mode -->
+      <div class="mode-content" id="mode-chat">
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-typing" id="chat-typing" style="display:none">
+          <div class="typing-dots"><span></span><span></span><span></span></div>
+          AI Tutor is thinking...
+        </div>
+        <div class="chat-quick">
+          <button onclick="askQuick('Can you summarize the main points?')">Main points?</button>
+          <button onclick="askQuick('What are the most important concepts?')">Key concepts?</button>
+          <button onclick="askQuick('Give me an example of the main topic')">Give example</button>
+          <button onclick="askQuick('What should I focus on for an exam?')">Exam focus?</button>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="chat-input" placeholder="Ask anything about your material..." onkeydown="if(event.key==='Enter')sendChat()"/>
+          <button class="send-btn" onclick="sendChat()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Paste Modal -->
+<div class="modal-overlay" id="paste-modal" style="display:none" onclick="if(event.target===this)hidePasteModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <span>Paste your notes</span>
+      <button onclick="hidePasteModal()" class="modal-close">✕</button>
+    </div>
+    <input type="text" id="paste-title" placeholder="Title (e.g. Chapter 3 Notes)" style="margin-bottom:10px"/>
+    <textarea id="paste-text" placeholder="Paste your study material here..."></textarea>
+    <button class="generate-btn" onclick="pasteText()" style="width:100%;margin-top:10px">Save Notes</button>
+  </div>
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
