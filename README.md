@@ -3,7 +3,7 @@
 ## Author
 **Gimhani Dilmika**  
 University of Jaffna  
-DecodeLabs Internship Project 4
+
 
 ---
 
